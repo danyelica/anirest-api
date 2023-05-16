@@ -21,7 +21,7 @@ const getThisPic = async (req, res) => {
     const query = await knex("pics").where("id", id);
     const keyWords = await chatGPT.createCompletion({
       model: "text-davinci-003",
-      prompt: `qual as palavras chaves da frase: ${query[0].description}`,
+      prompt: `responda só as palavras chaves entre vírgulas da frase: ${query[0].description}`,
     });
     const relatedPics = await getKeyWordsPics(keyWords.data.choices[0].text);
 
@@ -51,7 +51,7 @@ const getThisUserPic = async (req, res) => {
 };
 
 const getKeyWordsPics = async (words) => {
-  const keyWords = words.split(",");
+  const keyWords = words.trim().split(",");
   let allQueries = [];
 
   try {
@@ -82,8 +82,8 @@ const search = async (req, res) => {
 
   try {
     const keyWords = await chatGPT.createCompletion({
-      model: "text-davinci-003",
-      prompt: `qual as palavras chaves da frase: ${phrase}`,
+      model: "gpt-3.5-turbo",
+      prompt: `responda só as palavras chaves entre vírgulas da frase: ${phrase}`,
     });
     const relatedPics = await getKeyWordsPics(keyWords.data.choices[0].text);
 
