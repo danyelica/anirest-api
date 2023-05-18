@@ -132,11 +132,12 @@ const updatePic = async (req, res) => {
 
     const query = await knex("pics")
       .where("id", id)
-      .update({ mainPic, title, authorpic, description, author })
+      .update({ mainpic: mainPic, title, authorpic, description, author })
       .returning("*");
 
     return res.status(200).json(query[0]);
   } catch (error) {
+    console.log(error.message);
     return res.status(400).json({ message: "Erro interno no servidor" });
   }
 };
